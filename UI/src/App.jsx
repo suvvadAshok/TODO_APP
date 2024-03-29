@@ -37,6 +37,18 @@ function App() {
       });
   }
 
+  function deleteNotes(id) {
+    console.log(id);
+    fetch(`${API_URL}/api/todoapp/deletenotes?id=${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        setIsState(true);
+        alert(result);
+      });
+  }
+
   return (
     <>
       <h1>Todo</h1>
@@ -47,8 +59,10 @@ function App() {
       <ul>
         {notes &&
           notes.map((i, index) => (
-            <li key={index} className="">
+            <li key={String(index)} className="flex gap-4">
               {i.description}
+              {i.id}
+              <button onClick={deleteNotes(i.id)}>delete</button>
             </li>
           ))}
       </ul>
