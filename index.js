@@ -1,10 +1,10 @@
 const Express = require("express");
 const Mongoclient = require("mongodb").MongoClient;
 const cors = require("cors");
-const multer = require("multer");
 
 const app = Express();
 app.use(cors());
+app.use(Express.json());
 
 const CONNECTION_STRING =
   "mongodb+srv://ashok:ashok@cluster2.pyrxxed.mongodb.net/?retryWrites=true&w=majority&appName=Cluster2";
@@ -28,13 +28,13 @@ app.get("/api/todoapp/getnotes", (request, response) => {
     });
 });
 
-app.post("/api/todoapp/addnotes", multer().none(), (request, response) => {
+app.post("/api/todoapp/addnotes", (req, res) => {
   database.collection("sampletodocollection").count({}, (error, numOfDocs) => {
     database.collection("sampletodocollection").insert({
-      id: (numOfDocs + 1).toString(),
-      description: request.body.newNotes,
+      id: (Number(numOfDocs) + 1).toString(),
+      description: req.body.newNotes,
     });
-    response.json("added notes Succesfully");
+    res.json("added notes Succesfully");
   });
 });
 

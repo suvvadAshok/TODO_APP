@@ -2,44 +2,46 @@ import React from "react";
 
 function App() {
   const [notes, setNotes] = React.useState([]);
-  const [form, setForm] = React.useState({ description: "" });
+  // const [form, setForm] = React.useState({ newNotes: "" });
+  const [isState, setIsState] = React.useState(false);
 
   const API_URL = "http://localhost:5038";
 
   React.useEffect(() => {
     fetch(`${API_URL}/api/todoapp/getnotes`)
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then((data) => setNotes(data));
-  }, []);
+  }, [isState]);
 
   function takeNotes(e) {
     e.preventDefault();
-
-    setForm(new FormData());
+    const formData = new FormData(e.target);
 
     fetch(`${API_URL}/api/todoapp/addnotes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(Object.fromEntries(formData)),
     })
       .then((response) => response.json())
-      .then((result) => alert(result))
+      .then((result) => {
+        setIsState(true);
+        alert(result);
+      })
       .catch((error) => {
         console.error("Error:", error);
         alert("Failed to add note");
       });
   }
 
-  console.log("---", notes);
-  console.log("form", form);
-
   return (
     <>
       <h1>Todo</h1>
       <form onSubmit={takeNotes} className="flex gap-2">
-        <input type="text" name="" id="" />
+        <input type="text" name="newNotes" />
         <button type="submit">Add notes</button>
       </form>
       <ul>
@@ -55,6 +57,3 @@ function App() {
 }
 
 export default App;
-
-
-
