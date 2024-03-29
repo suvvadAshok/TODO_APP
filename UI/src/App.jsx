@@ -2,7 +2,6 @@ import React from "react";
 
 function App() {
   const [notes, setNotes] = React.useState([]);
-  // const [form, setForm] = React.useState({ newNotes: "" });
   const [isState, setIsState] = React.useState(false);
 
   const API_URL = "http://localhost:5038";
@@ -28,23 +27,25 @@ function App() {
     })
       .then((response) => response.json())
       .then((result) => {
-        setIsState(true);
+        setIsState(!isState);
         alert(result);
       })
       .catch((error) => {
         console.error("Error:", error);
         alert("Failed to add note");
       });
+      
+      e.target.reset();
   }
 
   function deleteNotes(id) {
     console.log(id);
-    fetch(`${API_URL}/api/todoapp/deletenotes?id=${id}`, {
+    fetch(`${API_URL}/api/todoapp/deletenotes/${id}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
       .then((result) => {
-        setIsState(true);
+        setIsState(!isState);
         alert(result);
       });
   }
@@ -62,7 +63,7 @@ function App() {
             <li key={String(index)} className="flex gap-4">
               {i.description}
               {i.id}
-              <button onClick={deleteNotes(i.id)}>delete</button>
+              <button onClick={() => deleteNotes(i.id)}>delete</button>
             </li>
           ))}
       </ul>

@@ -39,8 +39,8 @@ app.post("/api/todoapp/addnotes", (req, res) => {
 });
 
 app.delete("/api/todoapp/deletenotes/:id", (request, response) => {
-  database.collection("sampletodocollection").delete({
-    id: request.query.id,
+  database.collection("sampletodocollection").deleteOne({
+    id: request.params.id,
   });
   response.json("delete succesfully");
 });
